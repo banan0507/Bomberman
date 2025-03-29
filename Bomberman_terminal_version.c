@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <string.h>
 
-#define MAP_SIZE 11   //trebuie sa fie matrice bidimensionala
+#define MAP_SIZE 11   //trebuie sa fie matrice bidimensionala si cu coef impar
 
 char map[MAP_SIZE][MAP_SIZE];
+char errorMessage[200] = ""; // Buffer pentru mesajul de eroare
 
 void clear_screen()
 {
@@ -22,7 +24,7 @@ void generate_map()
         for(int j = 0; j<MAP_SIZE; j++)
             if(i == 0 || j == 0 || i == MAP_SIZE - 1 || j == MAP_SIZE -1)
                 map[i][j] = '#';   // marginea hartii este perete solid
-            else if(i % 2 !=0 && j % 2 != 0)    //punem peretii din mijlocul hartii
+            else if(i % 2 == 0 && j % 2 == 0)    //punem peretii din mijlocul hartii
                 map[i][j] = '#';
             else
                 map[i][j] = (rand() % 4 == 0) ? '@' : ' ';   // @ reprezinta peretii distructibili cu o sansa de 25% de spawn
@@ -30,7 +32,6 @@ void generate_map()
 
 void afisare()
 {
-    clear_screen();
     for(int i=0; i<MAP_SIZE; i++)
     {
         for(int j=0; j<MAP_SIZE; j++)
@@ -42,6 +43,8 @@ void afisare()
                 printf("%c", map[i][j]);
         printf("\n");
     }
+    if(strlen(errorMessage) > 0)
+        printf("\n\033[1;31m%s\033[0m\n", errorMessage);   //mesaj rosu sa fie la vederea utilizatorului
 }
 
 void mutare_player(char input)
@@ -95,6 +98,7 @@ int main()
     char input;
     while(1)
     {
+        clear_screen();
         afisare();
         printf("\nMisca-te cu WASD, pune bomba cu B: ");
         scanf(" %c", &input);
@@ -103,13 +107,18 @@ int main()
         {
             punere_bomba();
             explode_bomba();
+            strcpy(errorMessage, "");
         }
         else if(input == 'w' || input == 'a' || input == 's' || input == 'd')
-            mutare_player(input);
+        {
+            mutare_player(input);\
+            strcpy(errorMessage, "");
+        }
         else
         {
-            printf("Comandă invalidă! Folosește una dintre următoarele litere:\n");
-            printf("W - Muta sus, S - Muta jos, A - Muta stanga, D - Muta dreapta, B - Pune bomba\n");
+            strcpy(errorMessage, "Comanda invalida! Foloseste una dintre urmatoarele litere:\n W - Muta sus, S - Muta jos, A - Muta stanga, D - Muta dreapta, B - Pune bomba\n");
+            afisare();
+            sleep(5);
         }
     }
     printf("\n");
