@@ -1,11 +1,14 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
+
+#include "map.h"
+
+SDL_Window* window;
+SDL_Renderer* renderer;
 
 int main(int argc, char* argv[])
-{
-    SDL_Window* window = NULL;
-    SDL_Renderer* renderer = NULL;
-    
+ {
     int result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     if(result < 0)
     {
@@ -13,12 +16,15 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    window = SDL_CreateWindow("sdl3 hello world", 800, 600, 0);
+    window = SDL_CreateWindow("Bomberman", 975, 975, SDL_WINDOW_RESIZABLE);
+    
     if(window == NULL)
     {
         SDL_Log("SDL_CreateWindow: %s", SDL_GetError());
         return -2;
     }
+
+    SDL_SetWindowIcon(window, IMG_Load("Assets\\Yellowicon-Game-Stars-Bomberman.256.png"));
 
     renderer = SDL_CreateRenderer(window, NULL);
     SDL_SetRenderVSync(renderer, 1);
@@ -28,7 +34,7 @@ int main(int argc, char* argv[])
         return -3;
     }
 
-    SDL_Log("SDL3 initialized");
+    SDL_Log("Game start!");
 
     SDL_Event event;
     int quit = 0;
@@ -44,13 +50,11 @@ int main(int argc, char* argv[])
                     break;
             }
         }
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0xff, 0xff);
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
+        draw_map();
         SDL_Delay(1);
     }
 
-    SDL_Log("SDL3 shutdown");
+    SDL_Log("Game over!");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
