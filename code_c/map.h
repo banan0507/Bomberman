@@ -9,9 +9,11 @@
 #define TILE_SIZE 16
 #define TILE_SIZE_SHOW 65
 
+extern int tile_map[MAP_HEIGHT][MAP_WIDTH];
+
 SDL_Surface* load_map_image(const char* file_path);
 
 extern SDL_Renderer *renderer;
 
-void draw_map();
+void draw_map(SDL_Texture* spritesheet);
 void load_tiles(SDL_Renderer *renderer);

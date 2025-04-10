@@ -3,6 +3,7 @@
 #include <SDL3_image/SDL_image.h>
 
 #include "map.h"
+#include "player.h"
 
 SDL_Window* window;
 SDL_Renderer* renderer;
@@ -38,25 +39,31 @@ int main(int argc, char* argv[])
 
     SDL_Event event;
     int quit = 0;
+    SDL_Texture* spritesheet = IMG_LoadTexture(renderer, "Assets\\spritesheet.png");
+    if (spritesheet == NULL) {
+        SDL_Log("Eroare la încărcarea spritesheet-ului: %s", SDL_GetError());
+        return -1;
+    }
     while(!quit)
     {
         while(SDL_PollEvent(&event))
         {
-            switch(event.type)
+            handle_player_input(&event);
+            if (event.type == SDL_EVENT_QUIT) 
             {
-                case SDL_EVENT_QUIT:
-                    SDL_Log("SDL3 event quit");
-                    quit = 1;
-                    break;
+                quit = 1;
             }
         }
-        draw_map();
-        SDL_Delay(1);
+        draw_map(spritesheet);
+        draw_player(renderer, spritesheet);
+        
+        SDL_RenderPresent(renderer);
     }
 
     SDL_Log("Game over!");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_DestroyTexture(spritesheet);
 
     SDL_Quit();
 

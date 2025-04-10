@@ -3,19 +3,19 @@
 int tile_map[MAP_HEIGHT][MAP_WIDTH] = 
 {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
-    {0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
@@ -58,18 +58,28 @@ int tile_map[MAP_HEIGHT][MAP_WIDTH] =
 //     SDL_DestroyTexture(tile_texture_2);   
 // }
 
-void draw_map() 
+void draw_map(SDL_Texture* spritesheet) 
 {
-    SDL_Texture* tileSheet = IMG_LoadTexture(renderer, "Assets\\spritesheet.png");
+    SDL_FRect tileCoords[] = {
+        { 0, 114, 16, 16 },       
+        { 68, 114, 16, 16 }
+    };
+
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) 
         {
             int tileType = tile_map[i][j];
 
-            const SDL_FRect srcRect = { tileType * TILE_SIZE, 114.0f, TILE_SIZE, TILE_SIZE };  
+            if (tileType < 0 || tileType >= sizeof(tileCoords) / sizeof(tileCoords[0])) 
+            {
+                SDL_Log("TileType %d nu are coordonate definite!", tileType);
+                continue;
+            }
+
+            const SDL_FRect srcRect = tileCoords[tileType];
             const SDL_FRect dstRect = { j * TILE_SIZE_SHOW, i * TILE_SIZE_SHOW, TILE_SIZE_SHOW, TILE_SIZE_SHOW }; 
 
-            SDL_RenderTexture(renderer, tileSheet, &srcRect, &dstRect);
+            SDL_RenderTexture(renderer, spritesheet, &srcRect, &dstRect);
         }
     }
 
