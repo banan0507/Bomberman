@@ -4,7 +4,7 @@ int tile_map[MAP_HEIGHT][MAP_WIDTH] =
 {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -81,7 +81,5 @@ void draw_map(SDL_Texture* spritesheet)
 
             SDL_RenderTexture(renderer, spritesheet, &srcRect, &dstRect);
         }
-    }
-
-    SDL_RenderPresent(renderer); 
+    } 
 }

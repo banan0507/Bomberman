@@ -53,11 +53,11 @@ int main(int argc, char* argv[])
             {
                 quit = 1;
             }
+            update_player_position();
+            draw_map(spritesheet);
+            draw_player(renderer, spritesheet);
+            SDL_RenderPresent(renderer);        
         }
-        draw_map(spritesheet);
-        draw_player(renderer, spritesheet);
-        
-        SDL_RenderPresent(renderer);
     }
 
     SDL_Log("Game over!");
