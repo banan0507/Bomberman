@@ -2,6 +2,8 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <time.h>
+#include <stdlib.h>
 
 #define NR_MAPS 1
 #define MAP_WIDTH 15
@@ -17,3 +19,4 @@ extern SDL_Renderer *renderer;
 
 void draw_map(SDL_Texture* spritesheet);
 void load_tiles(SDL_Renderer *renderer);
+void map_randomtiles();

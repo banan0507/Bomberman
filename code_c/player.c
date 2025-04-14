@@ -1,13 +1,7 @@
 #include "player.h"
 #include "map.h"
 
-typedef struct 
-{
-    float x, y; 
-    float width, height; 
-} Player;
-
-Player player = { 65, 65, 57, 57 }; 
+Player player = { 65, 65, 57, 57 };
 
 int key_states[4] = {0, 0, 0, 0}; // 0: W, 1: A, 2: S, 3: D
 
@@ -19,20 +13,20 @@ void handle_player_input(SDL_Event* event)
     {
         switch (event->key.key) 
         {
-            case SDLK_W: key_states[0] = 1; break; // W apăsat
-            case SDLK_A: key_states[1] = 1; break; // A apăsat
-            case SDLK_S: key_states[2] = 1; break; // S apăsat
-            case SDLK_D: key_states[3] = 1; break; // D apăsat
+            case SDLK_W: key_states[0] = 1; break; 
+            case SDLK_A: key_states[1] = 1; break; 
+            case SDLK_S: key_states[2] = 1; break; 
+            case SDLK_D: key_states[3] = 1; break; 
         }
     }
     else if (event->type == SDL_EVENT_KEY_UP) 
     {
         switch (event->key.key) 
         {
-            case SDLK_W: key_states[0] = 0; break; // W eliberat
-            case SDLK_A: key_states[1] = 0; break; // A eliberat
-            case SDLK_S: key_states[2] = 0; break; // S eliberat
-            case SDLK_D: key_states[3] = 0; break; // D eliberat
+            case SDLK_W: key_states[0] = 0; break; 
+            case SDLK_A: key_states[1] = 0; break; 
+            case SDLK_S: key_states[2] = 0; break; 
+            case SDLK_D: key_states[3] = 0; break; 
         }
     }
 }
@@ -68,10 +62,8 @@ int can_move_to(float x, float y)
     }
 
     // Verificăm dacă toate colțurile sunt traversabile
-    if (tile_map[tile_y1][tile_x1] == 0 || // Stânga-sus
-        tile_map[tile_y1][tile_x2] == 0 || // Dreapta-sus
-        tile_map[tile_y2][tile_x1] == 0 || // Stânga-jos
-        tile_map[tile_y2][tile_x2] == 0)  // Dreapta-jos
+    if (tile_map[tile_y1][tile_x1] == 0 || tile_map[tile_y1][tile_x2] == 0 || tile_map[tile_y2][tile_x1] == 0 || tile_map[tile_y2][tile_x2] == 0  
+    || tile_map[tile_y1][tile_x1] == 2 || tile_map[tile_y1][tile_x2] == 2 || tile_map[tile_y2][tile_x1] == 2 || tile_map[tile_y2][tile_x2] == 2)
         return 0; // Coliziune cu un tile solid
 
     return 1; // Mișcarea este permisă

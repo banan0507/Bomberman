@@ -4,6 +4,7 @@
 
 #include "map.h"
 #include "player.h"
+#include "bomb.h"
 
 SDL_Window* window;
 SDL_Renderer* renderer;
@@ -44,6 +45,9 @@ int main(int argc, char* argv[])
         SDL_Log("Eroare la încărcarea spritesheet-ului: %s", SDL_GetError());
         return -1;
     }
+
+    map_randomtiles();
+
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -53,8 +57,14 @@ int main(int argc, char* argv[])
             {
                 quit = 1;
             }
+            if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_B) {
+                place_bomb();
+            }
+    
             update_player_position();
+            update_bomb(); 
             draw_map(spritesheet);
+            draw_bomb(renderer, spritesheet);
             draw_player(renderer, spritesheet);
             SDL_RenderPresent(renderer);        
         }

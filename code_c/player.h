@@ -2,6 +2,14 @@
 
 #include <SDL3/SDL.h>
 
+typedef struct 
+{
+    float x, y; 
+    float width, height; 
+} Player;
+
+extern Player player; 
+
 void handle_player_input(SDL_Event* event);
 void draw_player(SDL_Renderer* renderer, SDL_Texture* spritesheet);
 int can_move_to(float x, float y);
