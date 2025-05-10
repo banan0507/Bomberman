@@ -11,6 +11,6 @@ typedef struct {
 extern Bomb bomb;
 
 void place_bomb();
-void update_bomb();
+void update_bomb(float delta_time);
 void explode_bomb();
 void draw_bomb(SDL_Renderer* renderer, SDL_Texture* spritesheet);

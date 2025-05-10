@@ -8,16 +8,16 @@ void place_bomb() {
     if (bomb.active) return; // Nu putem plasa o altă bombă dacă una este deja activă
 
     // Plasăm bomba la poziția player-ului (rotunjită la coordonate de tile)
-    bomb.x = (int)(player.x / TILE_SIZE_SHOW);
-    bomb.y = (int)(player.y / TILE_SIZE_SHOW);
+    bomb.x = (int)((player.x + 25) / TILE_SIZE_SHOW);
+    bomb.y = (int)((player.y + 25)/ TILE_SIZE_SHOW);
     bomb.timer = 2000; // Timer-ul pentru explozie (3 secunde)
     bomb.active = 1;   // Activăm bomba
 }
 
-void update_bomb() {
+void update_bomb(float delta_time) {
     if (!bomb.active) return; // Dacă bomba nu este activă, nu facem nimic
 
-    bomb.timer -= 100; 
+    bomb.timer -= delta_time * 1000; 
     if (bomb.timer <= 0) {
         explode_bomb(); // Explodăm bomba
         bomb.active = 0; // Dezactivăm bomba

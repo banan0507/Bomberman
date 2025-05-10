@@ -1,4 +1,5 @@
 #include "map.h"
+#include "player.h"
  
 int tile_map[MAP_HEIGHT][MAP_WIDTH] = 
 {
@@ -63,8 +64,23 @@ void map_randomtiles()
     srand(time(NULL)); 
     for(int i = 0; i < MAP_HEIGHT; i++)
         for(int j = 0; j < MAP_WIDTH; j++)
+        {    
+            // Verificăm dacă tile-ul coincide cu poziția oricărui AI
+            int is_ai_position = 0;
+            for (int k = 0; k < MAX_AI; k++) {
+                if (i == (int)(enemies[k].y / TILE_SIZE_SHOW) && j == (int)(enemies[k].x / TILE_SIZE_SHOW)) {
+                    is_ai_position = 1;
+                    break;
+                }
+            }
+
+            if (is_ai_position) {
+                tile_map[i][j] = 1; // Tile traversabil
+                continue;
+            }
             if(tile_map[i][j] == 1 && (i != 1 || j != 1))
                 tile_map[i][j] = (rand() % 4 == 0) ? 2 : 1;
+        }
 }
 
 void draw_map(SDL_Texture* spritesheet) 
