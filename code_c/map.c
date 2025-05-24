@@ -3,82 +3,88 @@
  
 int tile_map[MAP_HEIGHT][MAP_WIDTH] = 
 {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
-// SDL_Surface* load_map_image(const char* file_path) 
-// {
-//     SDL_Surface* image = IMG_Load(file_path);
-//     if (image == NULL) 
-//     {
-//         SDL_Log("Eroare la IMG_Load in map: %s", SDL_GetError());
-//         return NULL;
-//     }
-//     return image;
-// }
+int tile_map_initial[MAP_HEIGHT][MAP_WIDTH] = 
+{
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+};
 
-// void load_tiles(SDL_Renderer *renderer)
-// {
-//     SDL_Surface* spritesheet = load_map_image("Assets\\spritesheet.png");
-//     if (spritesheet == NULL) {
-//         SDL_Log("Eroare la încărcarea spritesheet-ului!");
-//         return;
-//     }
-    
-//     SDL_Rect tile_1 = { 0, 114, 16, 16 };  
-//     SDL_Rect tile_2 = { 119, 114, 16, 16 }; 
+void stergere_tiles()
+{
+    for(int i = 0; i < MAP_HEIGHT; i++)
+        for(int j = 0; j < MAP_WIDTH; j++)
+        {
+            if(tile_map[i][j] == 2)
+                tile_map[i][j] = 1;
+        }
+}
 
-//     SDL_Surface* tile_surface_1 = SDL_CreateRGBSurfaceWithFormat(0, tile_1.w, tile_1.h, 32, spritesheet->format);
-//     SDL_Surface* tile_surface_2 = SDL_CreateRGBSurfaceWithFormat(0, tile_2.w, tile_2.h, 32, spritesheet->format);
-
-//     SDL_BlitSurface(spritesheet, &tile_1, tile_surface_1, NULL);
-//     SDL_BlitSurface(spritesheet, &tile_2, tile_surface_2, NULL);
-
-//     SDL_Texture* tile_texture_1 = SDL_CreateTextureFromSurface(renderer, tile_surface_1);
-//     SDL_Texture* tile_texture_2 = SDL_CreateTextureFromSurface(renderer, tile_surface_2);
-
-//     SDL_FreeSurface(tile_surface_1);
-//     SDL_FreeSurface(tile_surface_2);
-//     SDL_FreeSurface(spritesheet);
-
-//     SDL_DestroyTexture(tile_texture_1);
-//     SDL_DestroyTexture(tile_texture_2);   
-// }
+void reset_map() 
+{
+    for (int i = 0; i < MAP_HEIGHT; i++)
+        for (int j = 0; j < MAP_WIDTH; j++)
+            tile_map[i][j] = tile_map_initial[i][j];
+}
 
 void map_randomtiles()
 {
+    //void stergere_tiles();
+    int tile_w = TILE_SIZE_W;
+    int tile_h = TILE_SIZE_H;
+    
     srand(time(NULL)); 
     for(int i = 0; i < MAP_HEIGHT; i++)
         for(int j = 0; j < MAP_WIDTH; j++)
         {    
-            // Verificăm dacă tile-ul coincide cu poziția oricărui AI
+            //Verificăm dacă tile-ul coincide cu poziția oricărui AI
             int is_ai_position = 0;
             for (int k = 0; k < MAX_AI; k++) {
-                if (i == (int)(enemies[k].y / TILE_SIZE_SHOW) && j == (int)(enemies[k].x / TILE_SIZE_SHOW)) {
+                if (i == (int)(enemies[k].y / tile_h) && j == (int)(enemies[k].x / tile_w)) {
                     is_ai_position = 1;
                     break;
                 }
             }
-
+            // Dacă tile-ul este poziția unui AI, îl setăm ca traversabil
             if (is_ai_position) {
                 tile_map[i][j] = 1; // Tile traversabil
                 continue;
             }
-            if(tile_map[i][j] == 1 && (i != 1 || j != 1))
+
+            // Protejăm tile-urile solide (0) - nu le modificăm
+            if (tile_map[i][j] == 0) {
+                continue;
+            }
+            if(tile_map[i][j] == 1 && (i != 1 || j != 1) && (i != 1 || j != 2) && (i != 2 || j != 1))
                 tile_map[i][j] = (rand() % 4 == 0) ? 2 : 1;
         }
 }
@@ -103,7 +109,7 @@ void draw_map(SDL_Texture* spritesheet)
             }
 
             const SDL_FRect srcRect = tileCoords[tileType];
-            const SDL_FRect dstRect = { j * TILE_SIZE_SHOW, i * TILE_SIZE_SHOW, TILE_SIZE_SHOW, TILE_SIZE_SHOW }; 
+            const SDL_FRect dstRect = { j * TILE_SIZE_W, i * TILE_SIZE_H, TILE_SIZE_W, TILE_SIZE_H }; 
 
             SDL_RenderTexture(renderer, spritesheet, &srcRect, &dstRect);
         }

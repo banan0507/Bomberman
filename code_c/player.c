@@ -1,67 +1,123 @@
 #include "player.h"
 #include "map.h"
+#include "bomb.h"
 
-Player player = { 65, 65, 50, 50 };
-
-AI enemies[MAX_AI] = {
-    { 200, 200, 50, 50, 100.0f, 2.0f, 0 },
-    { 300, 300, 50, 50, 100.0f, 2.0f, 1 },
-    { 400, 400, 50, 50, 100.0f, 2.0f, 2 },
-    { 500, 500, 50, 50, 100.0f, 2.0f, 3 },
-    { 600, 600, 50, 50, 100.0f, 2.0f, 0 }
-};
+Player player;
+AI enemies[MAX_AI];
 
 int key_states[4] = {0, 0, 0, 0}; // 0: W, 1: A, 2: S, 3: D
+int game_running = 1; // Jocul începe activ
+int can_pass_bomb = 0;
+int player_stanga = 0;
+int player_dreapta = 0;
+int player_sus = 0;
+int player_jos = 0;
+int ai_stanga = 0;
+int ai_dreapta = 0;
+int ai_sus = 0;
+int ai_jos = 0;
 
-// void handle_player_input(SDL_Event* event) 
-// {
+void reinitializare_player() 
+{
+    player.x = TILE_SIZE_W;
+    player.y = TILE_SIZE_H;
+    player.width = 0.8 * TILE_SIZE_W;  
+    player.height = 0.8 * TILE_SIZE_H;
+    player.alive = 1; // Player-ul este viu
+}
 
-//     if (event->type == SDL_EVENT_KEY_DOWN) 
-//     {
-//         switch (event->key.key) 
-//         {
-//             case SDLK_W: key_states[0] = 1; break; 
-//             case SDLK_A: key_states[1] = 1; break; 
-//             case SDLK_S: key_states[2] = 1; break; 
-//             case SDLK_D: key_states[3] = 1; break; 
-//         }
-//     }
-//     else if (event->type == SDL_EVENT_KEY_UP) 
-//     {
-//         switch (event->key.key) 
-//         {
-//             case SDLK_W: key_states[0] = 0; break; 
-//             case SDLK_A: key_states[1] = 0; break; 
-//             case SDLK_S: key_states[2] = 0; break; 
-//             case SDLK_D: key_states[3] = 0; break; 
-//         }
-//     }
-// }
+int player_on_bomb_tile()
+{
+    float size_w = TILE_SIZE_W;
+    float size_h = TILE_SIZE_H;
+    if (!bomb.active) return 0;
+    
+    int corners[4][2] = {
+        { (int)(player.x / size_w), (int)(player.y / size_h) },
+        { (int)((player.x + player.width - 1) / size_w), (int)(player.y / size_h) },
+        { (int)(player.x / size_w), (int)((player.y + player.height - 1) / size_h) },
+        { (int)((player.x + player.width - 1) / size_w), (int)((player.y + player.height - 1) / size_h) }
+    };
 
-// static void update(float delta_time) {
+    for (int i = 0; i < 4; i++) {
+        if (corners[i][0] == bomb.x && corners[i][1] == bomb.y)
+            return 1;
+    }
+    return 0;
+}
 
+void spawn_ai_random() 
+{
+    int tile_w = TILE_SIZE_W;
+    int tile_h = TILE_SIZE_H;
 
-//     if (!check_collision(new_x, position_player.y)) {
-//         position_player.x = new_x;
-//     }
+    srand(time(NULL)); // Inițializăm generatorul de numere aleatorii
 
-//     if (!check_collision(position_player.x, new_y)) {
-//         position_player.y = new_y;
-//     }
-// }
+    int player_tile_x = (int)(player.x / tile_w);
+    int player_tile_y = (int)(player.y / tile_h);
+
+    for (int i = 0; i < MAX_AI; i++) {
+        int valid_position = 0;
+
+        while (!valid_position) {
+            // Generăm coordonate aleatorii pentru AI
+            int random_tile_x = rand() % MAP_WIDTH;
+            int random_tile_y = rand() % MAP_HEIGHT;
+
+            // Verificăm dacă tile-ul este traversabil (1)
+            if (tile_map[random_tile_y][random_tile_x] != 1) {
+                continue;
+            }
+
+            // NU permite spawn pe player sau în vecinătatea jos/dreapta
+        int is_near_player = 0;
+        if (
+            (random_tile_x == player_tile_x     && random_tile_y == player_tile_y)     || // pe player
+            (random_tile_x == player_tile_x + 1 && random_tile_y == player_tile_y)     || // dreapta
+            (random_tile_x == player_tile_x     && random_tile_y == player_tile_y + 1) || // jos
+            (random_tile_x == player_tile_x + 1 && random_tile_y == player_tile_y + 1)    // dreapta-jos
+        ) {
+            continue;
+        }
+
+            // Verificăm dacă nu se suprapune cu alte AI-uri
+            valid_position = 1;
+            for (int j = 0; j < i; j++) {
+                int ai_tile_x = (int)(enemies[j].x / tile_w);
+                int ai_tile_y = (int)(enemies[j].y / tile_h);
+                if (random_tile_x == ai_tile_x && random_tile_y == ai_tile_y) {
+                    valid_position = 0;
+                    break;
+                }
+            }
+
+            // Dacă poziția este validă, setăm coordonatele AI-ului
+            if (valid_position) {
+                enemies[i].x = random_tile_x * tile_w;
+                enemies[i].y = random_tile_y * tile_h;
+                enemies[i].width = 0.8 * tile_w;  
+                enemies[i].height = 0.8 * tile_h;
+                enemies[i].speed = 100;       
+                enemies[i].direction = rand() % 4;
+                enemies[i].direction_timer = 2;
+                enemies[i].alive = 1;
+            }
+        }
+    }
+}
 
 void update_ai_position(float delta_time) 
 {
     for (int i = 0; i < MAX_AI; i++) {
         AI* enemy = &enemies[i];
 
-        // Scădem timer-ul pentru schimbarea direcției
+        if (!enemy->alive) continue;
+
         enemy->direction_timer -= delta_time;
 
-        // Dacă timer-ul a expirat, alegem o nouă direcție aleatorie
         if (enemy->direction_timer <= 0) {
-            enemy->direction = rand() % 4; // Alegem o direcție aleatorie
-            enemy->direction_timer = 2.0f; // Resetăm timer-ul
+            enemy->direction = rand() % 4; 
+            enemy->direction_timer = 2; 
         }
 
         float new_x = enemy->x;
@@ -84,7 +140,7 @@ void update_ai_position(float delta_time)
         }
 
         // Verificăm coliziunile și actualizăm poziția
-        if (can_move_to(new_x, enemy->y)) {
+        if (can_move_to(new_x, enemy->y) && !is_bomb_at(new_x, enemy->y, enemy->width, enemy->height)) {
             enemy->x = new_x;
         } else {
             // Inversăm direcția pe axa X
@@ -92,20 +148,29 @@ void update_ai_position(float delta_time)
             else if (enemy->direction == 3) enemy->direction = 2;
         }
 
-        if (can_move_to(enemy->x, new_y)) {
+        if (can_move_to(enemy->x, new_y) && !is_bomb_at(enemy->x, new_y, enemy->width, enemy->height)) {
             enemy->y = new_y;
         } else {
             // Inversăm direcția pe axa Y
             if (enemy->direction == 0) enemy->direction = 1;
             else if (enemy->direction == 1) enemy->direction = 0;
         }
+        if (!(player.x + player.width <= enemy->x || player.x >= enemy->x + enemy->width ||
+              player.y + player.height <= enemy->y || player.y >= enemy->y + enemy->height)) {
+            game_running = 0; // Player-ul a fost omorât
+            player.alive = 0; // Player-ul este mort
+        }
+        enemy->last_direction = enemy->direction;
     }
 }
 
 int is_tile_type(float x, float y, int type) 
 {
-    int tile_x = (int)(x / TILE_SIZE_SHOW);
-    int tile_y = (int)(y / TILE_SIZE_SHOW);
+    int tile_w = TILE_SIZE_W;
+    int tile_h = TILE_SIZE_H;
+
+    int tile_x = (int)(x / tile_w);
+    int tile_y = (int)(y / tile_h);
 
     // Verificăm dacă tile-ul este în limitele hărții
     if (tile_x < 0 || tile_x >= MAP_WIDTH || tile_y < 0 || tile_y >= MAP_HEIGHT) {
@@ -118,10 +183,13 @@ int is_tile_type(float x, float y, int type)
 
 int can_move_to(float x, float y) 
 {
-    int tile_x1 = (int)(x / TILE_SIZE_SHOW); // Colțul stânga-sus
-    int tile_y1 = (int)(y / TILE_SIZE_SHOW); // Colțul stânga-sus
-    int tile_x2 = (int)((x + player.width - 1) / TILE_SIZE_SHOW); // Colțul dreapta-sus
-    int tile_y2 = (int)((y + player.height - 1) / TILE_SIZE_SHOW); // Colțul stânga-jos
+    int tile_w = TILE_SIZE_W;
+    int tile_h = TILE_SIZE_H;
+    
+    int tile_x1 = (int)(x / tile_w); // Colțul stânga-sus
+    int tile_y1 = (int)(y / tile_h); // Colțul stânga-sus
+    int tile_x2 = (int)((x + player.width - 1) / tile_w); // Colțul dreapta-sus
+    int tile_y2 = (int)((y + player.height - 1) / tile_h); // Colțul stânga-jos
 
     // // Verificăm dacă toate colțurile sunt în limitele hărții
     // if (tile_x1 < 0 || tile_x2 >= MAP_WIDTH || tile_y1 < 0 || tile_y2 >= MAP_HEIGHT) {
@@ -145,34 +213,71 @@ void update_player_position(float delta_time)
 
     // Mișcare în sus
     if (keyboard_state[SDL_SCANCODE_W]) {
-        new_y -= 100 * delta_time;
+        new_y -= 150 * delta_time;
+        player_sus = 1;
     }
     // Mișcare la stânga
     if (keyboard_state[SDL_SCANCODE_A]) {
-        new_x -= 100 * delta_time;
+        new_x -= 150 * delta_time;
+        player_stanga = 1;
     }
     // Mișcare în jos
     if (keyboard_state[SDL_SCANCODE_S]) {
-        new_y += 100 * delta_time;
+        new_y += 150 * delta_time;
+        player_jos = 1;
     }
     // Mișcare la dreapta
     if (keyboard_state[SDL_SCANCODE_D]) {
-        new_x += 100 * delta_time;
+        new_x += 150 * delta_time;
+        player_dreapta = 1;
     }
 
-    // Actualizăm poziția player-ului dacă nu există coliziuni
-    if (can_move_to(new_x, player.y)) {
+    // Mutare pe axa X
+    if (can_move_to(new_x, player.y) && 
+        (!is_bomb_at(new_x, player.y, player.width, player.height) || (can_pass_bomb && player_on_bomb_tile()))) {
         player.x = new_x;
     }
-    if (can_move_to(player.x, new_y)) {
+
+    // Mutare pe axa Y
+    if (can_move_to(player.x, new_y) && 
+        (!is_bomb_at(player.x, new_y, player.width, player.height) || (can_pass_bomb && player_on_bomb_tile()))) {
         player.y = new_y;
+    }
+
+    // *** Setează can_pass_bomb = 0 doar dacă playerul nu mai e pe tile-ul bombei după ambele mutări ***
+    if (!player_on_bomb_tile()) {
+        can_pass_bomb = 0;
     }
 }
 
 void draw_player(SDL_Renderer* renderer, SDL_Texture* spritesheet) 
 {
-    const SDL_FRect srcRect = { 16, 0, 15, 25 };
+    const SDL_FRect srcRect = { 16, 0, 15, 24 };
     const SDL_FRect dstRect = { (int)player.x, (int)player.y, (int)player.width, (int)player.height };
+    const SDL_FRect srcRect_stanga = { 64, 0, 14.9, 23.6 };
+    const SDL_FRect srcRect_dreapta = { 112, 0, 16, 23.6 };
+    const SDL_FRect srcRect_sus = { 160, 0, 15, 24 };
+    const SDL_FRect srcRect_jos = { 16, 0, 15, 24 };
+    if (player_sus) {
+        SDL_RenderTexture(renderer, spritesheet, &srcRect_sus, &dstRect);
+        player_sus = 0;
+        return;
+    }
+    if (player_jos) {
+        SDL_RenderTexture(renderer, spritesheet, &srcRect_jos, &dstRect);
+        player_jos = 0;
+        return;
+    }
+    if (player_dreapta) {
+        SDL_RenderTexture(renderer, spritesheet, &srcRect_dreapta, &dstRect);
+        player_dreapta = 0;
+        return;
+    }
+    if (player_stanga) {
+        SDL_RenderTexture(renderer, spritesheet, &srcRect_stanga, &dstRect);
+        player_stanga = 0;
+        return;
+    }
     SDL_RenderTexture(renderer, spritesheet, &srcRect, &dstRect);
 }
 
@@ -180,8 +285,30 @@ void draw_ai(SDL_Renderer* renderer, SDL_Texture* spritesheet)
 {
     for (int i = 0; i < MAX_AI; i++) {
         AI* enemy = &enemies[i];
-        SDL_FRect srcRect = { 16, 24, 15, 25 };
+        if (!enemy->alive) continue;
+
+        SDL_FRect srcRect = { 16, 24, 15, 24 };
         SDL_FRect dstRect = { enemy->x, enemy->y, enemy->width, enemy->height };
-        SDL_RenderTexture(renderer, spritesheet, &srcRect, &dstRect);
+        SDL_FRect srcRect_stanga = { 64, 24.5, 14.9, 23 };
+        SDL_FRect srcRect_dreapta = { 112, 24.5, 16, 23 };
+        SDL_FRect srcRect_sus = { 160, 24.5, 15, 23.5 };
+        SDL_FRect srcRect_jos = { 16, 24.5, 15, 23.5 };
+
+        switch (enemy->last_direction) {
+            case 0: // sus
+                SDL_RenderTexture(renderer, spritesheet, &srcRect_sus, &dstRect);
+                break;
+            case 1: // jos
+                SDL_RenderTexture(renderer, spritesheet, &srcRect_jos, &dstRect);
+                break;
+            case 2: // stanga
+                SDL_RenderTexture(renderer, spritesheet, &srcRect_stanga, &dstRect);
+                break;
+            case 3: // dreapta
+                SDL_RenderTexture(renderer, spritesheet, &srcRect_dreapta, &dstRect);
+                break;
+            default:
+                SDL_RenderTexture(renderer, spritesheet, &srcRect, &dstRect);
+        }
     }
 }
