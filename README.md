@@ -1,3 +1,5 @@
+https://uptro29158-my.sharepoint.com/:w:/g/personal/alexandru_sicoie_student_upt_ro/EeSxWyYkLwVHqidepdSvj0oB0mzJ15APSmSv4dgjGwX61Q?e=bNAb4Z
+
 BOMBERMAN – SPECIFICATII 
 
 Sicoie Alexandru 
@@ -46,6 +48,26 @@ Bomberman – versiune 2D:
 
 -Playerul are animatie in functie de directia in care merge, adica se schimba poza pe care o afisam, la fel si la Ai; 
 
--Jocul are si o iconita cu clasicul bomberman;	 
+-Jocul are si o iconita cu clasicul bomberman;	Picture 
+
+Ecrane win/lose/begin:  
+
+PicturePicturePicture 
+
+ 
+
+Functii interesante si metode folosite: 
+
+PictureFunctia asta este folosita pt a pune tile urile random pe harta (cele care pot fi distruse, cu mentiunea ca tile 0 este cel solid, 1 iarba, si 2 cel random), folosim rand cu o sansa de 25% de spawn si verifica sa fie tile ul potrivit si sa nu fie pe spawn-ul playerului si nici pe cel de spawn ai. 
+
+ 
+
+ 
+
+Functia urmatoare este folosita pt desenarea playerului, care daca primeste W, A, S sau D schimba imaginea pe care o afiseaza pt ca miscarea sa fie cat mai smooth se poate intr un mediu 2D. Noi luam coordonatele dintr un spritesheet si la fiecare trebuie specificata si dimensiunea, si am mai multe variabile globale in functie de care se alege pozitia. Foarte similar arata si functiile de afisare mapa si afisare AI. 
+
+PicturePicture 
+
+Aici avem o portiune din map.h, din fisierul header, unde folosesc #pragma once care inlocuieste classicul ifndef si endif; includem bibliotecile grafice, iar in celelalte headere includem map.h; si cel mai important la define avem width si height, acestea reprezinta rezolutia care poate fi modificata foarte usor pt orice device, define ul ne ajuta sa modificam rapid in toate functiile unde este folosit. 
 
  
